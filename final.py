@@ -187,8 +187,10 @@ input()
 
 
 #Only superconductors with an Oxygen:Copper ratio of 2
-#cross reference Unique array to find compounds with iron >0
-SuperConductorsDataFrame.loc[(SuperConductorsUnique['Fe'] > 0) & (SuperConductorsUnique['Cu'] > 0) & (round(SuperConductorsUnique['O']/(2*SuperConductorsUnique['Cu']),0)==1)]
+#cross reference Unique array to find compounds with oxygen >0
+#cross reference Unique array to find compounds with copper >0
+#cross reference Unique array to find compounds with oxygen/copper~2
+SuperConductorsDataFrame.loc[(SuperConductorsUnique['O'] > 0) & (SuperConductorsUnique['Cu'] > 0) & (round(SuperConductorsUnique['O']/(2*SuperConductorsUnique['Cu']),0)==1)]
 
 NumberOfElementsData = SuperConductorsDataFrame.loc[:,('number_of_elements')]
 AtomicMassData = SuperConductorsDataFrame.loc[:,('mean_atomic_mass','weighted_mean_atomic_mass','gmean_atomic_mass','weighted_gmean_atomic_mass','entropy_atomic_mass','weighted_entropy_atomic_mass','range_atomic_mass','weighted_range_atomic_mass','standard_atomic_mass','weighted_standard_atomic_mass')]
