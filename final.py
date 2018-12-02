@@ -88,7 +88,16 @@ def visualizeClassifier(model, X, y, ax=None, cmap='rainbow'):
 
     ax.set(xlim=xlim, ylim=ylim)
 		
-	
+def RFScore(XTrain, XTest, YTrain, YTest, n):
+	#perform random forrst learning and score result
+    scores = []
+    for i in range(n):
+        RFC = RandomForestClassifier(n_estimators=100, max_depth=2, random_state=0)
+        RFC.fit(XTrain,YTrain)
+        scores.append(RFC.score(XTest,YTest))
+    return numpy.mean(scores)
+    
+    
 #preperations
 
 warnings.filterwarnings("ignore", category=DeprecationWarning) 
@@ -109,17 +118,15 @@ SuperConductorsFeatures = numpy.array(['number_of_elements',
 SuperConductorsFormulaCSV = numpy.loadtxt('predict_tc-master/unique.csv',delimiter=',',skiprows=1,usecols=range(0,87))
 SuperConductorsChemicals = numpy.array(['H','He','Li','Be','B','C','N','O','F','Ne','Na','Mg','Al','Si','P','S','Cl','Ar','K','Ca','Sc','Ti','V','Cr','Mn','Fe','Co','Ni','Cu','Zn','Ga','Ge','As','Se','Br','Kr','Rb','Sr','Y','Zr','Nb','Mo','Tc','Ru','Rh','Pd','Ag','Cd','In','Sn','Sb','Te','I','Xe','Cs','Ba','La','Ce','Pr','Nd','Pm','Sm','Eu','Gd','Tb','Dy','Ho','Er','Tm','Yb','Lu','Hf','Ta','W','Re','Os','Ir','Pt','Au','Hg','Tl','Pb','Bi','Po','At','Rn','critical_temp'])
 
-										
 SuperConductorsDataFrame = pandas.DataFrame(data=SuperConductorsCSV,columns=SuperConductorsFeatures)
 SuperConductorsUnique = pandas.DataFrame(data=SuperConductorsFormulaCSV,columns=SuperConductorsChemicals)
-
 
 SuperConductorsData = SuperConductorsDataFrame.loc[:,SuperConductorsDataFrame.columns !='critical_temperature']
 SuperConductorsTarget = SuperConductorsDataFrame.loc[:,'critical_temperature']
 
+scores =[]
 
-
-
+'''
 ######   	Visualize Data				#####
 #full set
 NumberOfElementsData = SuperConductorsDataFrame.loc[:,('number_of_elements')]
@@ -266,23 +273,10 @@ PCAPlot(SuperConductorsDataFrame,CriticalTemperatureData,2)
 matplotlib.pyplot.show()
 print("press <enter> to continue")
 input()
-
 '''
+
 ######   	Random Forrests				#####
 XTrain, XTest, YTrain, YTest = train_test_split(SuperConductorsData, SuperConductorsTarget,random_state=0)
 
-model = RandomForestClassifier(n_estimators=1000)
-model.fit(XTrain, YTrain)
-YPredict = model.predict(XTest)
-
-print(metrics.classification_report(YPredict, YTest))
-
-mat = confusion_matrix(YTest, YPredict)
-seaborn.heatmap(mat.T, square=True, annot=True, fmt='d', cbar=False)
-matplotlib.pyplot.xlabel('true label')
-matplotlib.pyplot.ylabel('predicted label');
-'''
-
-#show plots
-matplotlib.pyplot.show()
-
+score = RFScore(XTrain,XTest,YTrain,YTest,20)
+print("average score: ",score)
