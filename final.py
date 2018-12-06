@@ -126,7 +126,7 @@ SuperConductorsTarget = SuperConductorsDataFrame.loc[:,'critical_temperature']
 
 scores =[]
 
-'''
+
 ######   	Visualize Data				#####
 #full set
 NumberOfElementsData = SuperConductorsDataFrame.loc[:,('number_of_elements')]
@@ -273,7 +273,7 @@ PCAPlot(SuperConductorsDataFrame,CriticalTemperatureData,2)
 matplotlib.pyplot.show()
 print("press <enter> to continue")
 input()
-'''
+
 
 ######   	Random Forrests				#####
 XTrain, XTest, YTrain, YTest = train_test_split(SuperConductorsData, SuperConductorsTarget,random_state=0)
